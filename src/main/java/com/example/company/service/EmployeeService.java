@@ -1,9 +1,13 @@
 package com.example.company.service;
+
 import com.example.company.model.Employee;
 import com.example.company.operations.EmployeeOperations;
 import com.example.company.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -33,5 +37,14 @@ public class EmployeeService {
     public List<Employee> getEmployeesWithSalaryAboveThreshold(double threshold) {
         return employeeOperations.getEmployeesWithSalaryAboveThreshold(threshold);
     }
-
+    public List<Employee> getEmployeeByPosition(String position) {
+        return employeeOperations.getEmployeeByPosition(position);
+    }
+    public List<Employee> getEmployeeWithJoiningDateAbove(Date empJoinDate) {
+        return employeeOperations.getEmployeeWithDateOfJoiningAbove(empJoinDate);
+    }
+    public List<Employee> getEmployeesByPositionSorted(String position, String sortOrder) {
+        Sort sort = sortOrder.equalsIgnoreCase("asc") ? Sort.by(Sort.Order.asc("empName")) : Sort.by(Sort.Order.desc("empName"));
+        return employeeRepository.findByEmpPosition(position, sort);
+    }
 }

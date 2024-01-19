@@ -26,6 +26,7 @@ import com.example.company.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -42,4 +43,17 @@ public class EmployeeOperations {
     public List<Employee> getEmployeesWithSalaryAboveThreshold(double threshold) {
         return employeeRepository.findByEmpSalaryGreaterThan(threshold);
     }
+
+    public List<Employee> getEmployeeByPosition(String position) {
+        return employeeRepository.findByEmpPosition(position);
+    }
+
+    public List<Employee> getEmployeeWithDateOfJoiningAbove(Date empJoinDate) {
+        return employeeRepository.findByEmpJoinDateAfter(empJoinDate);
+    }
+
+//    public List<Employee> getEmployeesSortedByPosition(String eName, String sortOrder) {
+//        Sort sort = sortOrder.equalsIgnoreCase("asc") ? Sort.by(Sort.Order.asc("empName")) : Sort.by(Sort.Order.desc("empName"));
+//        return employeeRepository.findByEmpPosition(eName, sort);
+//    }
 }
