@@ -51,10 +51,9 @@ public class EmployeeController {
     public List<Employee> getEmployeeWithDateOfJoining(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date empJoinDate) {
         return employeeService.getEmployeeWithJoiningDateAbove(empJoinDate);
     }
-    @GetMapping("/by-position")
-    public List<Employee> getEmployeesByPositionSorted(
-            @RequestParam String position,
-            @RequestParam(defaultValue = "asc") String sortOrder) {
-        return employeeService.getEmployeesByPositionSorted(position, sortOrder);
+    @GetMapping("/by-name")
+    public List<Employee> getEmployeesByPositionSorted() {
+        return employeeService.getEmployeeSortedByName();
     }
+
 }

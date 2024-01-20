@@ -43,8 +43,7 @@ public class EmployeeService {
     public List<Employee> getEmployeeWithJoiningDateAbove(Date empJoinDate) {
         return employeeOperations.getEmployeeWithDateOfJoiningAbove(empJoinDate);
     }
-    public List<Employee> getEmployeesByPositionSorted(String position, String sortOrder) {
-        Sort sort = sortOrder.equalsIgnoreCase("asc") ? Sort.by(Sort.Order.asc("empName")) : Sort.by(Sort.Order.desc("empName"));
-        return employeeRepository.findByEmpPosition(position, sort);
+    public List<Employee> getEmployeeSortedByName() {
+        return employeeRepository.findAll(Sort.by(Sort.Direction.ASC, "empName"));
     }
 }

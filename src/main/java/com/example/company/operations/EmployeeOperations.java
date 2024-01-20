@@ -52,8 +52,4 @@ public class EmployeeOperations {
         return employeeRepository.findByEmpJoinDateAfter(empJoinDate);
     }
 
-//    public List<Employee> getEmployeesSortedByPosition(String eName, String sortOrder) {
-//        Sort sort = sortOrder.equalsIgnoreCase("asc") ? Sort.by(Sort.Order.asc("empName")) : Sort.by(Sort.Order.desc("empName"));
-//        return employeeRepository.findByEmpPosition(eName, sort);
-//    }
 }

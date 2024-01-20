@@ -13,5 +13,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findByEmpSalaryGreaterThan(double threshold);
     List<Employee> findByEmpPosition(String position);
     List<Employee> findByEmpJoinDateAfter(Date empJoinDate);
-    List<Employee> findByEmpPosition(String position, Sort sort);
+    List<Employee> findByEmpName(String empName, Sort sort);
 }
