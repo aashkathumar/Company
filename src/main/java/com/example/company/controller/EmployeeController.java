@@ -17,6 +17,7 @@ import java.util.List;
 public class EmployeeController {
     private final EmployeeService employeeService;
     private final EmployeeRepository employeeRepository;
+
     @Autowired
     public EmployeeController(EmployeeService employeeService, EmployeeRepository employeeRepository) {
         this.employeeService = employeeService;
@@ -44,57 +45,82 @@ public class EmployeeController {
         employeeService.deleteEmployee(empId);
     }
 
-    @GetMapping("/salaryAbove/{threshold}")
+    //Get list of Employees above a particular threshold
+    @GetMapping("/by-salary/{threshold}")
     public List<Employee> getEmployeesWithSalaryAboveThreshold(@PathVariable double threshold) {
         return employeeService.getEmployeesWithSalaryAboveThreshold(threshold);
     }
-    @GetMapping("/byPosition/{position}")
+
+    @GetMapping("/by-position/{position}")
     public List<Employee> getEmployeeByPosition(@PathVariable String position) {
         return employeeService.getEmployeeByPosition(position);
     }
+
     @GetMapping("/byDate/{empJoinDate}")
     public List<Employee> getEmployeeWithDateOfJoining(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date empJoinDate) {
         return employeeService.getEmployeeWithJoiningDateAbove(empJoinDate);
     }
+
+    //Get List of Employees sorted on the basis of a particular criteria
     @GetMapping("/by-name")
     public List<Employee> getEmployeesByPositionSorted() {
         return employeeService.getEmployeeSortedByName();
     }
-    @GetMapping("/emp/{position}")
-    public Page<Employee> getEmployeesByPositionPaginated(
-            @PathVariable String position,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return employeeService.getEmployeesByPositionPaginated(position, page, size);
+
+    @GetMapping("/by-salary")
+    public List<Employee> getEmployeesBySalarySorted() {
+        return employeeService.getEmployeeSortedBySalary();
     }
-    @GetMapping("/emp")
+
+    @GetMapping("/by-date")
+    public List<Employee> getEmployeesByDateSorted() {
+        return employeeService.getEmployeeSortedByDate();
+    }
+
+    //Get Paginated data of Employees based on a particular criteria
+    @GetMapping("/page-all")
     public Page<Employee> getEmployees(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         PageRequest pageable = PageRequest.of(page, size);
         return employeeRepository.findAll(pageable);
     }
-//    @GetMapping("/emp/criteria")
-//    public Page<Employee> getEmployeesByCriteria(
-//            @PathVariable String position,
-//            @PathVariable String criteria,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "10") int size) {
-////            List <Employee> list = employeeService.getEmployeeByPosition(position);
-//        Sort sort = Sort.by(criteria).ascending();
-//        Pageable pageable = PageRequest.of(page, size, sort);
-//
-//        // Fetch employees by position from your service
-//        List<Employee> employees = employeeService.getEmployeeByPosition(position);
-//
-//        // Sort the employees based on the specified criteria
-//        employees.sort(Comparator.comparing(Employee::getEmpName));
-//
-//        // Create a Page object using the sorted list and pageable information
-//        int start = (int) pageable.getOffset();
-//        int end = Math.min((start + pageable.getPageSize()), employees.size());
-//        return new PageImpl<>(employees.subList(start, end), pageable, employees.size());
-//    }
-
-
+    @GetMapping("/page-position/{position}")
+    public Page<Employee> getEmployeesByPositionPaginated(
+            @PathVariable String position,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return employeeService.getEmployeesByPositionPaginated(position, page, size);
+    }
+    @GetMapping("/page-name")
+    public Page<Employee> getEmployeesByNamePaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return employeeService.getEmployeesByNamePaginated(page, size);
+        //Pageable pageable = PageRequest.of(page, size, Sort.by("empName").ascending());
+        //return employeeRepository.findAll(pageable);
+    }
+    @GetMapping("/page-date")
+    public Page<Employee> getEmployeesByDatePaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return employeeService.getEmployeesByNamePaginated(page, size);
+        //Pageable pageable = PageRequest.of(page, size, Sort.by("empName").ascending());
+        //return employeeRepository.findAll(pageable);
+    }
+    @GetMapping("/page-salary")
+    public Page<Employee> getEmployeesBySalaryPaginated(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return employeeService.getEmployeesByNamePaginated(page, size);
+        //Pageable pageable = PageRequest.of(page, size, Sort.by("empName").ascending());
+        //return employeeRepository.findAll(pageable);
+    }
+    @GetMapping("/page")
+    public Page<Employee> getEmployeesPaginatedByCriteria(
+          @RequestParam(defaultValue = "empName") String criteria,
+          @RequestParam(defaultValue = "0") int page,
+          @RequestParam(defaultValue = "10") int size) {
+        return employeeService.getEmployeesByCriteriaPaginated(page, size, criteria);
+    }
 }

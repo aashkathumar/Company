@@ -49,8 +49,33 @@ public class EmployeeService {
     public List<Employee> getEmployeeSortedByName() {
         return employeeRepository.findAll(Sort.by(Sort.Direction.ASC, "empName"));
     }
+    public List<Employee> getEmployeeSortedBySalary() {
+        return employeeRepository.findAll(Sort.by(Sort.Direction.ASC,"empSalary"));
+    }
+    public List<Employee> getEmployeeSortedByDate() {
+        return employeeRepository.findAll(Sort.by(Sort.Direction.ASC, "empJoinDate"));
+    }
     public Page<Employee> getEmployeesByPositionPaginated(String position, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return employeeRepository.findByEmpPosition(position, pageable);
     }
+    public Page<Employee> getEmployeesByNamePaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("empName").ascending());
+        return employeeRepository.findAll(pageable);
+    }
+    public Page<Employee> getEmployeesByDatePaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("empJoinDate").ascending());
+        return employeeRepository.findAll(pageable);
+    }
+    public Page<Employee> getEmployeesBySalaryPaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("empSalary").ascending());
+        return employeeRepository.findAll(pageable);
+    }
+    public Page<Employee> getEmployeesByCriteriaPaginated(int page, int size, String criteria) {
+//        Pageable pageable = PageRequest.of(page, size, Sort.by(criteria).ascending());
+//        return employeeRepository.findAll(pageable);
+        Sort sort = Sort.by(criteria).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return employeeRepository.findAll(pageable);
+        }
 }
