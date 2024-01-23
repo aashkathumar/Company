@@ -4,6 +4,9 @@ import com.example.company.model.Employee;
 import com.example.company.operations.EmployeeOperations;
 import com.example.company.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -45,5 +48,9 @@ public class EmployeeService {
     }
     public List<Employee> getEmployeeSortedByName() {
         return employeeRepository.findAll(Sort.by(Sort.Direction.ASC, "empName"));
+    }
+    public Page<Employee> getEmployeesByPositionPaginated(String position, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return employeeRepository.findByEmpPosition(position, pageable);
     }
 }
