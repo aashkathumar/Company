@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -79,10 +80,10 @@ public class EmployeeService {
         Pageable pageable = PageRequest.of(page, size, sort);
         return employeeRepository.findAll(pageable);
     }
-//    public List<Employee> findEmployeesAboveThreshold(BigDecimal threshold) {
-//        LocalDate twoMonthsAgo = LocalDate.now().minusMonths(2);
-//        return employeeRepository.findEmployeesAboveThreshold(threshold, twoMonthsAgo);
-//    }
+    public List<Employee> findEmployeesAboveThresholdAndJoinDate(BigDecimal threshold) {
+        LocalDate twoMonthsAgo = LocalDate.now().minusMonths(2);
+        return employeeRepository.findEmployeesAboveThresholdAndJoinDate(threshold, twoMonthsAgo);
+    }
     public List<Employee> findEmployeeAboveThresholdAndId(BigDecimal threshold, long id) {
         return employeeRepository.findEmployeeAboveThresholdAndId(threshold, id);
     }

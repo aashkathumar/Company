@@ -125,11 +125,11 @@ public class EmployeeController {
           @RequestParam(defaultValue = "10") int size) {
         return employeeService.getEmployeesByCriteriaPaginated(page, size, criteria);
     }
-//    @GetMapping("/above-threshold")
-//    public ResponseEntity<List<Employee>> getEmployeesAboveThreshold(@RequestParam BigDecimal threshold) {
-//        List<Employee> employees = employeeService.findEmployeesAboveThreshold(threshold);
-//        return ResponseEntity.ok(employees);
-//    }
+    @GetMapping("/above-threshold-joindate")
+    public ResponseEntity<List<Employee>> getEmployeesAboveThresholdAndJoinDate(@RequestParam BigDecimal threshold) {
+        List<Employee> employees = employeeService.findEmployeesAboveThresholdAndJoinDate(threshold);
+        return ResponseEntity.ok(employees);
+    }
     @GetMapping("/above-threshold-id")
     public ResponseEntity<List<Employee>> getEmployeesAboveThresholdAndId(@RequestParam BigDecimal threshold,
                                                           @RequestParam long id) {
