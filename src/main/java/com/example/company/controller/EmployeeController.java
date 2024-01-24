@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -122,5 +124,16 @@ public class EmployeeController {
           @RequestParam(defaultValue = "0") int page,
           @RequestParam(defaultValue = "10") int size) {
         return employeeService.getEmployeesByCriteriaPaginated(page, size, criteria);
+    }
+//    @GetMapping("/above-threshold")
+//    public ResponseEntity<List<Employee>> getEmployeesAboveThreshold(@RequestParam BigDecimal threshold) {
+//        List<Employee> employees = employeeService.findEmployeesAboveThreshold(threshold);
+//        return ResponseEntity.ok(employees);
+//    }
+    @GetMapping("/above-threshold-id")
+    public ResponseEntity<List<Employee>> getEmployeesAboveThresholdAndId(@RequestParam BigDecimal threshold,
+                                                          @RequestParam long id) {
+        List<Employee> employees = employeeService.findEmployeeAboveThresholdAndId(threshold, id);
+        return ResponseEntity.ok(employees);
     }
 }
