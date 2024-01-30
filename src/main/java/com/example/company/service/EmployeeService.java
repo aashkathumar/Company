@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -86,5 +87,41 @@ public class EmployeeService {
     }
     public List<Employee> findEmployeeAboveThresholdAndId(BigDecimal threshold, long id) {
         return employeeRepository.findEmployeeAboveThresholdAndId(threshold, id);
+    }
+//    @Transactional
+//    public Employee updateEmployee(long empId, Employee updatedEmployee) {
+//        try {
+//            Employee existingEmployee = employeeRepository.findById(updatedEmployee.getEmpId()).orElse(null);
+//
+//            if (existingEmployee != null) {
+//                // Apply changes to the existing employee
+//                existingEmployee.setEmpName(updatedEmployee.getEmpName());
+//                existingEmployee.setEmpPosition(updatedEmployee.getEmpPosition());
+//                existingEmployee.setEmpSalary(updatedEmployee.getEmpSalary());
+//
+//                // Save the updated employee
+//                return employeeRepository.save(existingEmployee);
+//            } else {
+//                // Employee not found
+//                return null;
+//            }
+//        } catch (OptimisticLockingFailureException e) {
+//            // Handle concurrency conflict
+//            // You might inform the user or retry the operation
+//            // For example, you can throw a custom exception indicating a concurrency conflict
+//            throw new ConcurrencyConflictException("Concurrency conflict during employee update", e);
+//        }
+//    }
+    @Transactional
+    public Employee updateEmployee(long empId, Employee updatedEmployee) {
+
+        Employee existingEmployee = employeeRepository.findById(empId).orElseThrow(null);
+        // Apply changes to the existing employee
+        existingEmployee.setEmpName(updatedEmployee.getEmpName());
+        existingEmployee.setEmpPosition(updatedEmployee.getEmpPosition());
+        existingEmployee.setEmpSalary(updatedEmployee.getEmpSalary());
+
+        // Save the updated employee
+        return employeeRepository.save(existingEmployee);
     }
 }

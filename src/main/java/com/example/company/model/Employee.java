@@ -1,10 +1,7 @@
 package com.example.company.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -37,24 +34,28 @@ public class Employee {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date empJoinDate;
 
+    @Version
+    @Column(name = "version")
+    private long version;
+
     public Employee() {
     }
 
-    public Employee(long empId, String empName, String empPosition, BigDecimal empSalary, Date empJoinDate) {
-        super();
-        this.id = empId;
+    public Employee(long id, String empName, String empPosition, BigDecimal empSalary, Date empJoinDate, long version) {
+        this.id = id;
         this.empName = empName;
         this.empPosition = empPosition;
         this.empSalary = empSalary;
         this.empJoinDate = empJoinDate;
+        this.version = version;
     }
 
-    public long getEmpId() {
+    public long getId() {
         return id;
     }
 
-    public void setEmpId(int empId) {
-        this.id = empId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getEmpName() {
@@ -89,14 +90,23 @@ public class Employee {
         this.empJoinDate = empJoinDate;
     }
 
+    public long getVersion() {
+        return version;
+    }
+
+    public void setVersion(long version) {
+        this.version = version;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
-                "empId=" + id +
+                "id=" + id +
                 ", empName='" + empName + '\'' +
                 ", empPosition='" + empPosition + '\'' +
                 ", empSalary=" + empSalary +
                 ", empJoinDate=" + empJoinDate +
+                ", version=" + version +
                 '}';
     }
 }

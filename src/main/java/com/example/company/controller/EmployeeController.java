@@ -1,5 +1,6 @@
 package com.example.company.controller;
 
+import com.example.company.exceptions.ResourceNotFoundException;
 import com.example.company.model.Employee;
 import com.example.company.repository.EmployeeRepository;
 import com.example.company.service.EmployeeService;
@@ -37,14 +38,62 @@ public class EmployeeController {
         return employeeService.getEmployeeById(empId);
     }
 
-    @PostMapping
-    public Employee saveEmployee(@RequestBody Employee employee) {
-        return employeeService.saveEmployee(employee);
+    @PostMapping("/addEmployee")
+    public Employee createEmployee(@RequestBody Employee employee) {
+    Employee employee1 = new Employee();
+        employee1.setId(1);
+        employee1.setEmpName(employee.getEmpName());
+        employee1.setEmpPosition(employee.getEmpPosition());
+        employee1.setEmpSalary(employee.getEmpSalary());
+        employee1.setEmpJoinDate(employee.getEmpJoinDate());
+        employee1.setVersion(0);
+        return employeeRepository.save(employee1);
     }
 
+//    @PostMapping
+//    public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee) {
+//        try {
+//            Employee savedEmployee = employeeService.saveEmployee(employee);
+//            return ResponseEntity.ok(savedEmployee);
+//        } catch (Exception e) {
+//            // Log the exception
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
+
     @DeleteMapping("/{empId}")
-    public void deleteEmployee(int empId) {
+    public void deleteEmployee(@PathVariable Integer empId) {
         employeeService.deleteEmployee(empId);
+    }
+
+//    @PutMapping("/{empId}")
+//    public ResponseEntity<Employee> updateEmployee(@PathVariable long empId, @RequestBody Employee updatedEmployee) {
+//        Employee result = employeeService.updateEmployee(empId, updatedEmployee);
+//        return ResponseEntity.ok(result);
+//    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Employee> updateEmployee(@PathVariable long id, @RequestBody Employee updatedEmployee) {
+//        try {
+//            Employee updated = employeeService.updateEmployee(id, updatedEmployee);
+//            return ResponseEntity.ok(updated);
+//        } catch (OptimisticLockingFailureException e) {
+//            // Handle concurrency conflict
+//            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+//        }
+//    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable long id,@RequestBody Employee employeeDetails) {
+        Employee updateEmployee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee does not exist with id: " + id));
+
+        updateEmployee.setEmpName(employeeDetails.getEmpName());
+        updateEmployee.setEmpPosition(employeeDetails.getEmpPosition());
+        updateEmployee.setEmpSalary(employeeDetails.getEmpSalary());
+        updateEmployee.setEmpJoinDate(employeeDetails.getEmpJoinDate());
+
+        Employee updatedEmployee = employeeRepository.save(updateEmployee);
+
+        return ResponseEntity.ok(updateEmployee);
     }
 
     //Get list of Employees above a particular threshold
@@ -106,7 +155,7 @@ public class EmployeeController {
     public Page<Employee> getEmployeesByDatePaginated(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return employeeService.getEmployeesByNamePaginated(page, size);
+        return employeeService.getEmployeesByDatePaginated(page, size);
         //Pageable pageable = PageRequest.of(page, size, Sort.by("empName").ascending());
         //return employeeRepository.findAll(pageable);
     }
@@ -114,11 +163,11 @@ public class EmployeeController {
     public Page<Employee> getEmployeesBySalaryPaginated(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return employeeService.getEmployeesByNamePaginated(page, size);
+        return employeeService.getEmployeesBySalaryPaginated(page, size);
         //Pageable pageable = PageRequest.of(page, size, Sort.by("empName").ascending());
         //return employeeRepository.findAll(pageable);
     }
-    @GetMapping("/page")
+    @GetMapping("/page")    //http://localhost:8080/api/employee/page?criteria=empSalary
     public Page<Employee> getEmployeesPaginatedByCriteria(
           @RequestParam(defaultValue = "empName") String criteria,
           @RequestParam(defaultValue = "0") int page,
